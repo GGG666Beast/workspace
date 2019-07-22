@@ -130,11 +130,11 @@ int main(){
 
   int j=0;
   while(i>1){
-    printf("%d\n",j++);
+  
 
     /* Pick up the 2 minimum appearance characters */
-    couple[0]= delete_min(data,index); //ヒープから？？？
-    couple[1]= delete_min(data,index); //ヒープから？？？
+    couple[0]= delete_min(data,&i); //ヒープから？？？
+    couple[1]= delete_min(data,&i); //ヒープから？？？
 
     /* Create the nodes for the picked up characters  木の左側により小さいものを置くようにする*/
     if(couple[0].articulation == -1)left = make_1node(couple[0]); //左側に繋ぐ候補として、取り出したものが文字単体であればノードを作成する
@@ -155,7 +155,9 @@ int main(){
 
 
     num_of_newroot++;
-    construct_2(data,i--);
+    insert(data,newnode,&i);
+    
+  );
 
   }
 
@@ -184,7 +186,7 @@ int main(){
 void construct_2(Node *A, int n) {// 無秩序に並んだ配列をヒープにする
   int i,j;
   for (i=n/2; i>=1; i--){
-    printf("const\n");
+  
     downheap(A,i,n);
   
   }
@@ -195,7 +197,7 @@ void construct_2(Node *A, int n) {// 無秩序に並んだ配列をヒープに�
 void downheap(Node *A, int k, int n){
   int j;
   Node v;
-  printf("down\n");
+  
   v=A[k];
 
   while (k<=n/2) {
@@ -222,13 +224,13 @@ Node delete_min(Node *A,int *i){
   Node v = A[1];
   int n;
 
-  printf("delete\n");
+  
   n = *i;
 
   A[1] = A[n]; 
   downheap(A,1,--n);
   (*i)--;
-  printf("delcomp\n");
+
   return v;
 }
 
