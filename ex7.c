@@ -1,4 +1,3 @@
-
 #define BITS_PER_CHAR 8
 #define SIZE 256
 
@@ -128,8 +127,8 @@ int main(){
   i = num_of_chars;
   construct_2(data,i);//出現数を持った文字たちをヒープに入れる（「親は子より出現頻度の値が小さい」という順序関係に基づいてヒープ化する＝ minimum heap）
 
-  int j=0;
   while(i>1){
+<<<<<<< HEAD
   
 
     /* Pick up the 2 minimum appearance characters */
@@ -137,6 +136,12 @@ int main(){
     couple[1]= delete_min(data,&i); //ヒープから？？？
 
     /* Create the nodes for the picked up characters  木の左側により小さいものを置くようにする*/
+=======
+
+    /* Pick up the 2 minimum appearance characters */
+    couple[0]= delete_min(data,&i); //ヒープから？？？
+    couple[1]= delete_min(data,&i); //ヒープから？？？  /* Create the nodes for the picked up characters  木の左側により小さいものを置くようにする*/
+>>>>>>> 179fc18186404ce5dfb51f505e3b546317b6d54b
     if(couple[0].articulation == -1)left = make_1node(couple[0]); //左側に繋ぐ候補として、取り出したものが文字単体であればノードを作成する
     else left = head[couple[0].articulation];  //文字たちを集めた「木」であれば、その根に繋ぐ準備をする
     if(couple[1].articulation == -1)right = make_1node(couple[1]);
@@ -152,22 +157,22 @@ int main(){
     head[num_of_newroot]->c_left = left;  //作成した左側用ノードを木の左側に接続する
     head[num_of_newroot]->c_right = right;  //作成した右側用ノードを木の右側に接続する
 
-
-
     num_of_newroot++;
     insert(data,newnode,&i);
+<<<<<<< HEAD
     
   );
 
+=======
+>>>>>>> 179fc18186404ce5dfb51f505e3b546317b6d54b
   }
-
 
 
   /*Output Huffman binary tree*/
   printf("\n");
   result = Huffman_DFS(head[num_of_newroot-1],encode);
   printf("\nResult: The string \"%s\" \n",S);
-  printf("        can be expressed in \"%d bits\" by Huffman Encoding.\n",result);
+  printf("        can be expressed in \"%d bit\" by Huffman Encoding.\n",result);
 
   /*Free allocated memory*/
   free(index);
@@ -186,7 +191,10 @@ int main(){
 void construct_2(Node *A, int n) {// 無秩序に並んだ配列をヒープにする
   int i,j;
   for (i=n/2; i>=1; i--){
+<<<<<<< HEAD
   
+=======
+>>>>>>> 179fc18186404ce5dfb51f505e3b546317b6d54b
     downheap(A,i,n);
   
   }
@@ -224,13 +232,20 @@ Node delete_min(Node *A,int *i){
   Node v = A[1];
   int n;
 
+<<<<<<< HEAD
   
+=======
+>>>>>>> 179fc18186404ce5dfb51f505e3b546317b6d54b
   n = *i;
 
   A[1] = A[n]; 
   downheap(A,1,--n);
   (*i)--;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 179fc18186404ce5dfb51f505e3b546317b6d54b
   return v;
 }
 
@@ -280,7 +295,6 @@ NodePointer make_1node(Node keydata){
 int Huffman_DFS(NodePointer p,char *bin){
   static int i=0,totalbits;
 
-  printf("dfs\n");
   while(1){
 
     if ( p->vertex.visited == 0 ) {
@@ -295,17 +309,18 @@ int Huffman_DFS(NodePointer p,char *bin){
     }
 
 
-    if(p->c_left!=NULL && p->c_left.vertex.visited==0){ //DFSの要領で二分木を左側優先でたどる（もし、左側の子が探索可能で、かつ未到達であるならば。 Ex03とほぼ同じ）
+    if(p->c_left!=NULL && p->c_left->vertex.visited==0){ //DFSの要領で二分木を左側優先でたどる（もし、左側の子が探索可能で、かつ未到達であるならば。 Ex03とほぼ同じ）
       strcat(bin,"1");
       i++;
       totalbits = Huffman_DFS(p->c_left,bin);
     }
-    else if(p->c_right!=NULL &&p->c_right.vertex.visited==0){ //DFSの要領で二分木を右側にたどる（もし、右側の子が探索可能で、かつ未到達であるならば。 Ex03とほぼ同じ）
+    else if(p->c_right!=NULL &&p->c_right->vertex.visited==0){ //DFSの要領で二分木を右側にたどる（もし、右側の子が探索可能で、かつ未到達であるならば。 Ex03とほぼ同じ）
       strcat(bin,"0");
       i++;
       totalbits = Huffman_DFS(p->c_right,bin);
     }
     else break;
+
   }
 
   bin[--i]='\0';
