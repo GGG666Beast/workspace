@@ -3,47 +3,100 @@
 #define INF 99999
 void main(){
 
-    int *coin,*dp;
-    int pay,i,j,n,min,flag,temp;
+    int *power,*cost,*used,**dp;
+    int max,i,j,k,n,temp,min,flag,sum=0;
 
-printf("Input number of  types of coin).\n->");
+printf("Input number of  types of card:\n");
 scanf("%d",&n);
 
-coin=(int *)malloc(sizeof(int)*n);
+power=(int *)malloc(sizeof(int)*(n+1));
+cost=(int *)malloc(sizeof(int)*(n+1));
+used=(int *)malloc(sizeof(int)*(n+1));
 
-printf("Input donation of coins).\n->");
+for(i=0;i<=n;i++) used[i]=0;
+
+printf("Input power and cost of cards:\n");
+power[0]=0;
+cost[0]=0;
+
+for(i=1;i<=n;i++) {
+    scanf("%d",&power[i]);
+    scanf("%d",&cost[i]);
+}
 min=INF;
-for(i=0;i<n;i++) scanf("%d",&coin[i]);
-for(i=0;i<n;i++){
-    for(j=i;j<n;j++){
-        if(min>coin[j]){
-            min=coin[j];
+
+for(i=1;i<=n;i++){
+    for(j=i;j<=n;j++){
+        if(power[j]<min){
+            min=power[j];
             flag=j;
         }
-        temp=coin[i];
-        coin[i]=min;
-        coin[flag]=temp;
-        min=INF;
+    }
+    temp=power[i];
+    power[i]=power[flag];
+    power[flag]=temp;
+
+    temp=cost[i];
+    cost[i]=cost[flag];
+    cost[flag]=temp;
+    min=INF;
+}
+
+printf("Input maximum cost\n->");
+scanf("%d",&max);
+dp=(int **)malloc(sizeof(int *)*(max+1));
+for(i=0;i<=max;i++) dp[i]=(int *)malloc(sizeof(int)*(n+1));
+
+
+for(i=0;i<=max;i++) dp[i][0]=0;
+for(i=0;i<=n;i++) dp[0][i]=0;
+
+
+for(i=1;i<=max;i++){
+    for(j=1;j<=n;j++){
+        if(cost[j]<=i){
+            if(dp[i][j-1]<dp[i-cost[j]][j-1]+power[j]) dp[i][j]=dp[i-cost[j]][j-1]+power[j];
+            else dp[i][j]=dp[i][j-1];
+        }
+        else dp[i][j]=dp[i][j-1];
+    }
+}
+for(i=0;i<=max;i++){
+    for(j=0;j<=n;j++){
+        printf("%d ",dp[i][j]);
+    }
+    printf("\n");
+
+
+/*     for(j=n;j>1;j--){
+        for(i=max;i>1;i--){
+    if(dp[i][j]>dp[i-1][j] && power[j] == dp[i][j]-dp[i-1][j]) {
+        j--;
+        printf("Card (Power:%d Cost:%d) is selected\n",power[j],cost[j]);
+        used[j]++;
+    }
+    }
+    }*/
+    for(j=n;j>0;j--){
+            if(dp[max][j]-dp[max][j-1]==power[j]) used[j]=1;
+        }
     }
 }
 
 
-printf("Input how many cents should you pay?\n->");
-scanf("%d",&pay);
-dp=(int *)malloc(sizeof(int)*(pay+1));
-
-for(i=0;i<=pay;i++) dp[i]=INF;
-for(i=0;i<n;i++)dp[coin[i]]=1;
-dp[0]=0;
-
-for(i=0;i<=pay;i++){
-    for(j=0;j<n;j++){
-
-        if(i+coin[n]>pay)break;
-        if(dp[i+coin[j]]>dp[i]+1) dp[i+coin[j]]=dp[i]+1;
-    }
+ for(i=1;i<=n;i++){
+    if(used[i]==0) printf("Card (Power:%d Cost:%d) is not selected\n",power[i],cost[i]);
+    else printf("Card (Power:%d Cost:%d) is selected\n",power[i],cost[i]);
 }
-    if(dp[pay]==INF) printf("Error: you cannot pay for this value.\n");
-    else printf("Totally, you used %d coins for %d cents.\n",dp[pay],pay);
-
-}    
+/* 
+flag=0;
+for(i=max;i>0;i--){
+    for(j=n;j>0;j--){
+    if(dp[i][j]>dp[i-1][j])flag=i;
+    break;
+    }
+    if(flag!=0)break;
+}
+*/
+printf("My besk deck has %d cards (Cost: %d, Power: %d)\n",sum,flag,dp[max][n]);
+}
